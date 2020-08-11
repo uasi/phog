@@ -60,7 +60,5 @@ pub fn spawn_watcher() -> Receiver<Option<String>> {
 pub fn read() -> Result<String> {
     let mut context =
         ClipboardContext::new().map_err(|e| anyhow!("Could not get clipboard context: {}", e))?;
-    context
-        .get_contents()
-        .map_err(|e| anyhow!("Could not read clipboard content: {}", e))
+    Ok(context.get_contents().unwrap_or_else(|_| "".to_owned()))
 }

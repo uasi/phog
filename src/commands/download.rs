@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 
-use anyhow::{bail, Result};
 use structopt::StructOpt;
 
 use crate::commands;
@@ -8,6 +7,7 @@ use crate::common::count;
 use crate::config;
 use crate::database::Connection;
 use crate::downloader::{build_photo_path, Downloader};
+use crate::result::*;
 
 static AUTO_GC_THRESHOLD: u64 = 4096;
 

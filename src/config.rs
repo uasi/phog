@@ -3,7 +3,7 @@ use std::fs::{self, File};
 use std::io::{self, BufWriter, Read};
 use std::path::PathBuf;
 
-use anyhow::{bail, Context, Result};
+use crate::result::*;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 

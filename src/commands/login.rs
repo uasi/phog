@@ -1,11 +1,11 @@
 use std::io::Write;
 
-use anyhow::{Context, Result};
 use smol::block_on;
 use structopt::StructOpt;
 
 use crate::cli::APP_NAME;
 use crate::config::{self, Credentials, CONSUMER_KEY, CONSUMER_SECRET};
+use crate::result::*;
 use crate::twitter::Client;
 
 #[derive(Debug, StructOpt)]

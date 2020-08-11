@@ -5,12 +5,12 @@ use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 
-use anyhow::{anyhow, Result};
-
 #[cfg(not(any(windows, target_os = "macos")))]
 use copypasta::{nop_clipboard::NopClipboardContext as ClipboardContext, ClipboardProvider};
 #[cfg(any(windows, target_os = "macos"))]
 use copypasta::{ClipboardContext, ClipboardProvider};
+
+use crate::result::*;
 
 pub fn spawn_watcher() -> Receiver<Option<String>> {
     let mut changes_iter = {

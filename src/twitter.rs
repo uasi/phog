@@ -1,7 +1,6 @@
 use std::collections::BTreeMap;
 use std::ops::Deref;
 
-use anyhow::Result;
 use egg_mode::auth::{self, KeyPair, Token};
 use egg_mode::user::UserID;
 use linkify::{LinkFinder, LinkKind};
@@ -9,6 +8,7 @@ use regex::Regex;
 
 use crate::config::Credentials;
 use crate::egg_mode_ext::{likes, lookup, user_timeline, Timeline};
+use crate::result::*;
 
 pub use crate::egg_mode_ext::Tweet;
 pub use egg_mode::Response;

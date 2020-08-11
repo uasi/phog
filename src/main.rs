@@ -8,10 +8,11 @@ mod database_info;
 mod downloader;
 mod egg_mode_ext;
 mod recording;
+mod result;
 mod spinner;
 mod twitter;
 
-fn main() -> anyhow::Result<()> {
+fn main() -> result::Result<()> {
     pretty_env_logger::init_timed();
     config::init()?;
     smol::run(async { cli::run() })

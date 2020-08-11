@@ -1,10 +1,10 @@
-use anyhow::Result;
 use smol::block_on;
 use structopt::StructOpt;
 
 use crate::config;
 use crate::database::Connection;
 use crate::recording::{fetch::MAX_DEPTH, Extract, Fetch};
+use crate::result::*;
 use crate::twitter::Client;
 
 #[derive(Debug, Default, Eq, PartialEq, StructOpt)]

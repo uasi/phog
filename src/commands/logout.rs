@@ -1,8 +1,7 @@
 use std::fs;
 
-use anyhow::Result;
-
 use crate::config;
+use crate::result::*;
 
 pub fn run() -> Result<()> {
     let mut removed_any = false;

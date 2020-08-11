@@ -1,7 +1,6 @@
-use anyhow::{bail, Result};
-
 use crate::common::{count, print_rate_limit};
 use crate::database::Connection;
+use crate::result::*;
 use crate::spinner::new_spinner;
 use crate::twitter::{extract_screen_names, Client};
 

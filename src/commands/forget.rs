@@ -1,9 +1,9 @@
-use anyhow::Result;
 use structopt::StructOpt;
 
 use crate::common::count;
 use crate::config;
 use crate::database::Connection;
+use crate::result::*;
 
 #[derive(Debug, StructOpt)]
 #[structopt(setting = structopt::clap::AppSettings::ArgRequiredElseHelp)]

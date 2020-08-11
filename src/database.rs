@@ -3,10 +3,10 @@ use std::fs;
 use std::path::Path;
 use std::str::FromStr;
 
-use anyhow::{bail, Result};
 use rusqlite::{named_params, params};
 use serde::Deserialize;
 
+use crate::result::*;
 use crate::twitter::Tweet;
 
 static SCHEMA_SQL: &str = include_str!("../data/schema.sql");

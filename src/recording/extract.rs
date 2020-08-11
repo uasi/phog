@@ -1,10 +1,9 @@
 use std::io::{self, Read};
 
-use anyhow::{Context, Result};
-
 use crate::clipboard;
 use crate::database::Connection;
 use crate::recording::record;
+use crate::result::*;
 
 pub struct Extract<'a> {
     pub db: &'a Connection,

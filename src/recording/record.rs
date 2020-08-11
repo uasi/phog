@@ -1,9 +1,9 @@
-use anyhow::Result;
 use smol::block_on;
 
 use crate::common::{count, print_rate_limit};
 use crate::config;
 use crate::database::Connection;
+use crate::result::*;
 use crate::twitter::{self, UrlMap};
 
 pub fn with_string(db: &Connection, text: String) -> Result<()> {

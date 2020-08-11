@@ -4,12 +4,12 @@ use std::mem;
 use std::path::PathBuf;
 use std::time::Duration;
 
-use anyhow::{Context, Result};
 use curl::easy::{Easy2, Handler, WriteError};
 use curl::multi::Multi;
 use url::Url;
 
 use crate::database::Photoset;
+use crate::result::*;
 
 const MAX_CONCURRENCY: usize = 4;
 

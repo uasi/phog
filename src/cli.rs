@@ -1,10 +1,10 @@
 use std::env;
 
-use anyhow::Result;
 use structopt::StructOpt;
 
 use crate::commands;
 use crate::config;
+use crate::result::*;
 
 pub static APP_NAME: &str = structopt::clap::crate_name!();
 

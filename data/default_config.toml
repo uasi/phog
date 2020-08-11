@@ -1,0 +1,13 @@
+# phog uses this array of values as command line arguments when you just run
+# `phog` without arguments. If unset, `phog` does nothing.
+#core.default-args = ["get", "-f", "-p"]
+
+# phog downloads photos to this directory. If unset, the current working
+# directory is used.
+#download.dir = "~/Downloads"
+
+# `phog record --likes` fetches likes from these users.
+#record.default-likes = ["user1", "@user2", "https://twitter.com/user3"]
+
+# `phog record --user` fetches tweets from these users.
+#record.default-user = ["user1", "@user2", "https://twitter.com/user3"]

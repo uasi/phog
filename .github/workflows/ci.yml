@@ -1,0 +1,52 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          # - os: macos-latest
+          #   target: x86_64-apple-darwin
+          #   bin_suffix: ''
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            bin_suffix: ''
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            bin_suffix: '.exe'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          default: true
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --target=${{ matrix.target }}
+        env:
+          PHOG_COMPILE_ENV__CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          PHOG_COMPILE_ENV__CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+      - name: Test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+      - name: Package
+        shell: bash
+        run: |
+          cd target/${{ matrix.target }}/release
+          tar czvf phog-${{ matrix.target }}.tar.gz phog${{ matrix.bin_suffix }}
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: true
+          files: |
+            target/${{ matrix.target }}/release/phog-${{ matrix.target }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

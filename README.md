@@ -29,7 +29,8 @@ Logged in successfully.
 - Use `phog get --user <screen-name>...` to download from user timelines.
 - Use `phog get --likes <screen-name>...` to download from likes.
 - `<screen-name>...` is a list of screen names separated by a comma.
-
+- Use `phog get < tweet_urls.txt` to read URLs from a file.
+- Use `phog get --paste` to read URLs from the clipboard.
 
 ```
 $ phog get --user user1,@user2,https://twitter.com/user3 --likes user4

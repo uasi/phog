@@ -1,6 +1,6 @@
 [package]
 name = "phog"
-version = "0.1.1"
+version = "0.1.2-alpha.0"
 authors = ["Tomoki Aonuma <uasi@uasi.jp>"]
 repository = "https://github.com/uasi/phog"
 description = "phog downloads images from Twitter."

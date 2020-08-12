@@ -13,6 +13,7 @@ mod spinner;
 mod twitter;
 
 fn main() -> result::Result<()> {
+    color_eyre::install()?;
     pretty_env_logger::init_timed();
     config::init()?;
     smol::run(async { cli::run() })

@@ -2,6 +2,10 @@
 
 phog downloads images from Twitter. phog remembers which images you have downloaded and never downloads them again.
 
+## Installation
+
+Precompiled binaries are available for Windows, macOS and Linux. https://github.com/uasi/phog/releases
+
 ## Usage
 
 ### Logging in to Twitter

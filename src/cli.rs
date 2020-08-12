@@ -52,22 +52,19 @@ impl Cli {
 
 #[derive(Debug, StructOpt)]
 enum Command {
-    #[structopt(
-        name = "download",
-        about = "Downloads photos attached to the recorded tweets"
-    )]
+    #[structopt(about = "Downloads photos attached to the recorded tweets")]
     Download(commands::download::Args),
-    #[structopt(name = "forget", about = "Forgets recorded tweets and other data")]
+    #[structopt(about = "Forgets recorded tweets and other data")]
     Forget(commands::forget::Args),
-    #[structopt(name = "get", about = "Runs record and download at once")]
+    #[structopt(about = "Runs record and download at once")]
     Get(commands::get::Args),
-    #[structopt(name = "info", about = "Prints the database info")]
+    #[structopt(about = "Prints the database info")]
     Info,
-    #[structopt(name = "login", about = "Logs in to Twitter")]
+    #[structopt(about = "Logs in to Twitter")]
     Login(commands::login::Args),
-    #[structopt(name = "logout", about = "Logs out from Twitter")]
+    #[structopt(about = "Logs out from Twitter")]
     Logout,
-    #[structopt(name = "record", about = "Records tweets from various sources")]
+    #[structopt(about = "Records tweets from various sources")]
     Record(commands::record::Args),
 }
 

@@ -137,12 +137,11 @@ fn run_extract(args: ExtractArgs, db: &Connection) -> Result<()> {
     log::trace!("starting extraction; args={:?}", args);
     let extract = Extract::new(&db);
     if args.watch {
-        extract.from_clipboard_watcher()
+        extract.from_clipboard_watcher()?;
     } else if args.paste {
-        extract.from_clipboard()
-    } else {
-        extract.from_stdin()
+        extract.from_clipboard()?;
     }
+    extract.from_stdin()
 }
 
 fn run_fetch(args: FetchArgs, db: &Connection) -> Result<()> {

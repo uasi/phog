@@ -7,6 +7,7 @@ mod database;
 mod database_info;
 mod downloader;
 mod egg_mode_ext;
+mod input;
 mod recording;
 mod result;
 mod spinner;

@@ -1,7 +1,6 @@
-use std::io::{self, Read};
-
 use crate::clipboard;
 use crate::database::Connection;
+use crate::input;
 use crate::recording::record;
 use crate::result::*;
 
@@ -46,8 +45,6 @@ impl<'a> Extract<'a> {
 
 fn read_from_stdin() -> Result<String> {
     let mut buf = String::new();
-    io::stdin()
-        .read_to_string(&mut buf)
-        .context("Could not read from stdin")?;
+    input::read_to_string(&mut buf).context("Could not read from stdin")?;
     Ok(buf)
 }

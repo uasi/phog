@@ -3,6 +3,7 @@ use structopt::StructOpt;
 
 use crate::config;
 use crate::database::Connection;
+use crate::input;
 use crate::recording::{fetch::MAX_DEPTH, Extract, Fetch};
 use crate::result::*;
 use crate::twitter::Client;
@@ -93,13 +94,10 @@ impl Args {
     }
 
     pub fn should_fetch(&self) -> bool {
-        #[cfg(test)]
-        let no_input = true;
-        #[cfg(not(test))]
-        let no_input = atty::is(atty::Stream::Stdin);
-
         // Fetch does not need to be run if only extract options are specified.
-        self.fetch_args.force || !self.fetch_args.is_empty() || (self.is_empty() && no_input)
+        self.fetch_args.force
+            || !self.fetch_args.is_empty()
+            || (self.is_empty() && !input::exists())
     }
 }
 
@@ -185,6 +183,7 @@ fn validate_depth(depth: String) -> std::result::Result<(), String> {
 #[cfg(test)]
 mod args_tests {
     use crate::config;
+    use crate::input;
 
     use super::{Args, FetchArgs};
 
@@ -193,6 +192,11 @@ mod args_tests {
         {
             let args = Args::default();
             assert!(args.should_fetch());
+        }
+        {
+            let _handle = input::set_stdin_data(Some("x".to_owned()));
+            let args = Args::default();
+            assert!(!args.should_fetch());
         }
         {
             let mut args = Args::default();

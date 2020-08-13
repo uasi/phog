@@ -93,10 +93,13 @@ impl Args {
     }
 
     pub fn should_fetch(&self) -> bool {
+        #[cfg(test)]
+        let no_input = true;
+        #[cfg(not(test))]
+        let no_input = atty::is(atty::Stream::Stdin);
+
         // Fetch does not need to be run if only extract options are specified.
-        self.fetch_args.force
-            || !self.fetch_args.is_empty()
-            || (self.is_empty() && atty::is(atty::Stream::Stdin))
+        self.fetch_args.force || !self.fetch_args.is_empty() || (self.is_empty() && no_input)
     }
 }
 

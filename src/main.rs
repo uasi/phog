@@ -17,5 +17,5 @@ fn main() -> result::Result<()> {
     color_eyre::install()?;
     pretty_env_logger::init_timed();
     config::init()?;
-    smol::run(async { cli::run() })
+    smol::block_on(async_compat::Compat::new(async { cli::run() }))
 }

@@ -1,6 +1,7 @@
 use crate::common::{count, print_rate_limit};
 use crate::database::Connection;
 use crate::result::*;
+use crate::rt::block_on;
 use crate::spinner::new_spinner;
 use crate::twitter::{extract_screen_names, Client};
 
@@ -16,11 +17,11 @@ impl<'a> Fetch<'a> {
         Self { db, client }
     }
 
-    pub async fn from_likes(&self, screen_name_like: Vec<String>) -> Result<()> {
+    pub fn from_likes(&self, screen_name_like: Vec<String>) -> Result<()> {
         let screen_names = extract_screen_names(&screen_name_like);
         for screen_name in screen_names {
             let spinner = new_spinner(&format!("Fetching likes from {}", &screen_name));
-            let response = self.client.fetch_likes(screen_name.clone()).await?;
+            let response = self.client.fetch_likes(screen_name.clone())?;
             spinner.finish_and_clear();
 
             print_rate_limit(&response.rate_limit_status);
@@ -40,7 +41,7 @@ impl<'a> Fetch<'a> {
         Ok(())
     }
 
-    pub async fn from_user(
+    pub fn from_user(
         &self,
         screen_name_like: Vec<String>,
         uses_since_id: bool,
@@ -57,7 +58,7 @@ impl<'a> Fetch<'a> {
                 .user_timeline(screen_name.clone())
                 .with_page_size(200);
 
-            let (mut timeline, response) = timeline.start().await?;
+            let (mut timeline, response) = block_on(timeline.start())?;
             print_rate_limit(&response.rate_limit_status);
             let mut tweets = response.response;
 
@@ -101,7 +102,7 @@ impl<'a> Fetch<'a> {
                         since_id
                     );
 
-                    let (timeline2, response) = timeline.older(since_id).await?;
+                    let (timeline2, response) = block_on(timeline.older(since_id))?;
                     print_rate_limit(&response.rate_limit_status);
                     timeline = timeline2;
                     let older_tweets = response.response;

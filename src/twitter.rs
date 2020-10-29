@@ -9,6 +9,7 @@ use regex::Regex;
 use crate::config::Credentials;
 use crate::egg_mode_ext::{likes, lookup, user_timeline, Timeline};
 use crate::result::*;
+use crate::rt::block_on;
 
 pub use crate::egg_mode_ext::Tweet;
 pub use egg_mode::Response;
@@ -26,13 +27,13 @@ impl Client {
         Client { token }
     }
 
-    pub async fn fetch_likes<T: Into<UserID>>(&self, id: T) -> Result<Response<Vec<Tweet>>> {
-        let response = likes(id, &self.token).await?;
+    pub fn fetch_likes<T: Into<UserID>>(&self, id: T) -> Result<Response<Vec<Tweet>>> {
+        let response = block_on(likes(id, &self.token))?;
         Ok(response)
     }
 
-    pub async fn fetch_tweets(&self, status_ids: &[u64]) -> Result<Response<Vec<Tweet>>> {
-        let response = lookup(status_ids.to_vec(), &self.token).await?;
+    pub fn fetch_tweets(&self, status_ids: &[u64]) -> Result<Response<Vec<Tweet>>> {
+        let response = block_on(lookup(status_ids.to_vec(), &self.token))?;
         Ok(response)
     }
 
@@ -40,8 +41,8 @@ impl Client {
         user_timeline(id, true, false, &self.token)
     }
 
-    pub async fn verify_tokens(&self) -> Result<()> {
-        Ok(auth::verify_tokens(&self.token).await.map(|_| ())?)
+    pub fn verify_tokens(&self) -> Result<()> {
+        Ok(block_on(auth::verify_tokens(&self.token)).map(|_| ())?)
     }
 }
 

@@ -1,11 +1,11 @@
 use std::io::Write;
 
-use smol::block_on;
 use structopt::StructOpt;
 
 use crate::cli::APP_NAME;
 use crate::config::{self, Credentials, CONSUMER_KEY, CONSUMER_SECRET};
 use crate::result::*;
+use crate::rt::block_on;
 use crate::twitter::Client;
 
 #[derive(Debug, StructOpt)]
@@ -79,7 +79,7 @@ fn login_with_credentials() -> Result<()> {
     };
 
     let client = Client::new(credentials.clone());
-    block_on(client.verify_tokens()).context("Provided credentials are invalid")?;
+    client.verify_tokens().context("Provided credentials are invalid")?;
 
     config::save_credentials(credentials)?;
     println!("\nLogged in successfully.");

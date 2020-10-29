@@ -1,5 +1,3 @@
-use smol::block_on;
-
 use crate::common::{count, print_rate_limit};
 use crate::config;
 use crate::database::Connection;
@@ -30,7 +28,7 @@ pub fn with_string(db: &Connection, text: String) -> Result<()> {
     let tweets = {
         let mut acc = Vec::with_capacity(unseen_status_ids.len());
         for chunk in unseen_status_ids.chunks(100) {
-            let response = block_on(client.fetch_tweets(chunk))?;
+            let response = client.fetch_tweets(chunk)?;
             print_rate_limit(&response.rate_limit_status);
             acc.extend(response.response);
         }

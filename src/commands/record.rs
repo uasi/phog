@@ -1,4 +1,3 @@
-use smol::block_on;
 use structopt::StructOpt;
 
 use crate::config;
@@ -163,10 +162,10 @@ fn run_fetch(args: FetchArgs, db: &Connection) -> Result<()> {
     let fetch = Fetch::new(&db, client);
 
     if let Some(likes) = args.likes {
-        block_on(fetch.from_likes(likes))?;
+        fetch.from_likes(likes)?;
     }
     if let Some(user) = args.user {
-        block_on(fetch.from_user(user, uses_since_id, depth))?;
+        fetch.from_user(user, uses_since_id, depth)?;
     }
 
     Ok(())

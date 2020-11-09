@@ -79,7 +79,9 @@ fn login_with_credentials() -> Result<()> {
     };
 
     let client = Client::new(credentials.clone());
-    client.verify_tokens().context("Provided credentials are invalid")?;
+    client
+        .verify_tokens()
+        .context("Provided credentials are invalid")?;
 
     config::save_credentials(credentials)?;
     println!("\nLogged in successfully.");

@@ -13,7 +13,7 @@ pub fn with_string(db: &Connection, text: String) -> Result<()> {
     let status_ids: Vec<u64> = url_map.keys().copied().collect();
     let unseen_status_ids = {
         let mut result = db.select_unseen_status_ids_from(&status_ids)?;
-        result.sort();
+        result.sort_unstable();
         result
     };
 

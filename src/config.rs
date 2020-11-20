@@ -233,8 +233,8 @@ fn expand_tilde_in_paths(settings: &mut Settings) {
             let home = dirs::home_dir().expect("Could not locate the user's home directory");
             if dir == "~" {
                 settings.download.dir = Some(home);
-            } else if dir.starts_with("~/") {
-                settings.download.dir = Some(home.join(&dir[2..]));
+            } else if let Some(stripped_dir) = dir.strip_prefix("~/") {
+                settings.download.dir = Some(home.join(stripped_dir));
             }
             // `~foo/` is not supported.
         }

@@ -21,8 +21,16 @@ impl<'a> Fetch<'a> {
         let screen_names = extract_screen_names(&screen_name_like);
         for screen_name in screen_names {
             let spinner = new_spinner(&format!("Fetching likes from {}", &screen_name));
-            let response = self.client.fetch_likes(screen_name.clone())?;
+            let result = self.client.fetch_likes(screen_name.clone());
             spinner.finish_and_clear();
+
+            let response = match result {
+                Ok(response) => response,
+                Err(e) => {
+                    print_non_fatal_error_or_bail(e, &screen_name)?;
+                    continue;
+                }
+            };
 
             print_rate_limit(&response.rate_limit_status);
             let tweets = response.response;
@@ -48,7 +56,7 @@ impl<'a> Fetch<'a> {
         depth: usize,
     ) -> Result<()> {
         let screen_names = extract_screen_names(&screen_name_like);
-        for screen_name in screen_names.iter() {
+        'each_user: for screen_name in screen_names.iter() {
             log::trace!("starting fetching timeline; user={}", screen_name);
 
             let spinner = new_spinner(&format!("Fetching tweets from {}", &screen_name));
@@ -57,8 +65,17 @@ impl<'a> Fetch<'a> {
                 .client
                 .user_timeline(screen_name.clone())
                 .with_page_size(200);
+            let result = block_on(timeline.start());
 
-            let (mut timeline, response) = block_on(timeline.start())?;
+            let (mut timeline, response) = match result {
+                Ok(timeline_and_response) => timeline_and_response,
+                Err(e) => {
+                    spinner.finish_and_clear();
+                    print_non_fatal_error_or_bail(e.into(), screen_name)?;
+                    continue 'each_user;
+                }
+            };
+
             print_rate_limit(&response.rate_limit_status);
             let mut tweets = response.response;
 
@@ -101,8 +118,15 @@ impl<'a> Fetch<'a> {
                         page,
                         since_id
                     );
-
-                    let (timeline2, response) = block_on(timeline.older(since_id))?;
+                    let result = block_on(timeline.older(since_id));
+                    let (timeline2, response) = match result {
+                        Ok(timeline_and_response) => timeline_and_response,
+                        Err(e) => {
+                            spinner.finish_and_clear();
+                            print_non_fatal_error_or_bail(e.into(), screen_name)?;
+                            continue 'each_user;
+                        }
+                    };
                     print_rate_limit(&response.rate_limit_status);
                     timeline = timeline2;
                     let older_tweets = response.response;
@@ -162,5 +186,37 @@ impl<'a> Fetch<'a> {
         }
 
         Ok(())
+    }
+}
+
+fn print_non_fatal_error_or_bail(e: GenericError, screen_name: &str) -> Result<()> {
+    use egg_mode::error::Error as E;
+
+    if let Some(egg_mode_error) = e.downcast_ref::<E>() {
+        match egg_mode_error {
+            E::TwitterError(_, twitter_errors) => {
+                eprintln!(
+                    "Error: Twitter error: {} (screen_name=@{})",
+                    twitter_errors.to_string(),
+                    screen_name
+                );
+                Ok(())
+            }
+            E::BadStatus(code) => {
+                let hint = if code == &hyper::StatusCode::UNAUTHORIZED {
+                    format!(
+                        " (screen_name=@{}; maybe the user is protected or suspended)",
+                        screen_name
+                    )
+                } else {
+                    format!(" (screen_name=@{})", screen_name)
+                };
+                eprintln!("Error: {}{}", egg_mode_error.to_string(), hint);
+                Ok(())
+            }
+            _ => Err(e),
+        }
+    } else {
+        Err(e)
     }
 }

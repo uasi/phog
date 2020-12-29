@@ -32,7 +32,7 @@ pub fn spawn_watcher() -> Receiver<Option<String>> {
     let stopped = Arc::new(AtomicBool::new(false));
     let stop = stopped.clone();
     let handle = unsafe {
-        signal_hook::register(signal_hook::SIGINT, move || {
+        signal_hook::low_level::register(signal_hook::consts::SIGINT, move || {
             stop.store(true, Ordering::SeqCst);
         })
     }
@@ -47,7 +47,7 @@ pub fn spawn_watcher() -> Receiver<Option<String>> {
 
         if stopped.load(Ordering::SeqCst) {
             tx.send(None).expect("send must succeed");
-            signal_hook::unregister(handle);
+            signal_hook::low_level::unregister(handle);
             break;
         }
 

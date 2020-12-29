@@ -1,5 +1,6 @@
 use crate::common::{count, print_rate_limit};
 use crate::database::Connection;
+use crate::egg_mode_ext::Tweet;
 use crate::result::*;
 use crate::rt::block_on;
 use crate::spinner::new_spinner;
@@ -86,17 +87,7 @@ impl<'a> Fetch<'a> {
             );
 
             let since_id = if uses_since_id {
-                let mut since_id = None;
-                if let Some(tweet) = tweets.first() {
-                    if let Some(user) = &tweet.user {
-                        let max_id = self.db.select_max_status_id(user.id)?;
-                        since_id = max_id.map(|s| {
-                            s.parse::<u64>()
-                                .expect("Status ID in tweet object must be u64")
-                        });
-                    }
-                }
-                since_id
+                find_since_id(&*tweets, &self.db)
             } else {
                 None
             };
@@ -219,4 +210,17 @@ fn print_non_fatal_error_or_bail(e: GenericError, screen_name: &str) -> Result<(
     } else {
         Err(e)
     }
+}
+
+fn find_since_id(tweets: &[Tweet], db: &Connection) -> Option<u64> {
+    if let Some(tweet) = tweets.first() {
+        if let Some(user) = &tweet.user {
+            let max_id = db.select_max_status_id(user.id).unwrap_or(None);
+            return max_id.map(|s| {
+                s.parse::<u64>()
+                    .expect("Status ID in tweet object must be u64")
+            });
+        }
+    }
+    None
 }

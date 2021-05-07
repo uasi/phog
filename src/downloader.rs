@@ -1,7 +1,7 @@
 use std::fs::{self, File};
 use std::io::{self, Write};
 use std::mem;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::Duration;
 
 use curl::easy::{Easy2, Handler, WriteError};
@@ -295,7 +295,7 @@ pub fn build_photo_path(photoset: &Photoset, photo_url: &str, index: usize) -> P
     ))
 }
 
-fn make_part_path(path: &PathBuf) -> io::Result<PathBuf> {
+fn make_part_path(path: &Path) -> io::Result<PathBuf> {
     let mut file_name = path
         .file_name()
         .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "Destination path lacks file name"))?

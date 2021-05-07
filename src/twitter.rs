@@ -66,7 +66,7 @@ impl UrlMap {
             let url = link.as_str();
             if let Some(cap) = re.captures(url) {
                 let status_id = cap.get(1).expect("capture group must exist").as_str();
-                if let Ok(status_id) = u64::from_str_radix(status_id, 10) {
+                if let Ok(status_id) = status_id.parse::<u64>() {
                     map.insert(status_id, url.to_owned());
                 }
             }

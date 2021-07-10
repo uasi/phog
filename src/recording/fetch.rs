@@ -21,7 +21,7 @@ impl<'a> Fetch<'a> {
     pub fn from_likes(&self, screen_name_like: Vec<String>) -> Result<()> {
         let screen_names = extract_screen_names(&screen_name_like);
         for screen_name in screen_names {
-            let spinner = new_spinner(&format!("Fetching likes from {}", &screen_name));
+            let spinner = new_spinner(format!("Fetching likes from {}", &screen_name));
             let result = self.client.fetch_likes(screen_name.clone());
             spinner.finish_and_clear();
 
@@ -60,7 +60,7 @@ impl<'a> Fetch<'a> {
         'each_user: for screen_name in screen_names.iter() {
             log::trace!("starting fetching timeline; user={}", screen_name);
 
-            let spinner = new_spinner(&format!("Fetching tweets from {}", &screen_name));
+            let spinner = new_spinner(format!("Fetching tweets from {}", &screen_name));
 
             let timeline = self
                 .client

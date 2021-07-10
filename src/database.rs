@@ -235,7 +235,7 @@ impl Connection {
         let mut pruned = 0;
         for row in rows.flatten() {
             if is_prunable_row(&row) {
-                insert_stmt.execute_named(named_params! {
+                insert_stmt.execute(named_params! {
                     ":status_id": row.status_id,
                     ":user_id": row.user_id,
                     ":screen_name": row.screen_name,
@@ -336,7 +336,7 @@ impl Connection {
                 "#,
             )?;
             for status_id in status_ids {
-                insert_stmt.execute(&[<u64>::to_string(status_id)])?;
+                insert_stmt.execute([<u64>::to_string(status_id)])?;
             }
         }
 

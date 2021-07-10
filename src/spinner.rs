@@ -1,6 +1,6 @@
 use indicatif::{ProgressBar, ProgressStyle};
 
-pub fn new_spinner(msg: &str) -> ProgressBar {
+pub fn new_spinner(msg: String) -> ProgressBar {
     let style = ProgressStyle::default_spinner()
         .tick_strings(&["", ".", "..", "...", "....", ".....", "... Done."])
         .template("{msg}{spinner}");

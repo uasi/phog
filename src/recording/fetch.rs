@@ -87,7 +87,7 @@ impl<'a> Fetch<'a> {
             );
 
             let since_id = if uses_since_id {
-                find_since_id(&*tweets, &self.db)
+                find_since_id(&*tweets, self.db)
             } else {
                 None
             };
@@ -188,7 +188,7 @@ fn print_non_fatal_error_or_bail(e: GenericError, screen_name: &str) -> Result<(
             E::TwitterError(_, twitter_errors) => {
                 eprintln!(
                     "Error: Twitter error: {} (screen_name=@{})",
-                    twitter_errors.to_string(),
+                    twitter_errors,
                     screen_name
                 );
                 Ok(())
@@ -202,7 +202,7 @@ fn print_non_fatal_error_or_bail(e: GenericError, screen_name: &str) -> Result<(
                 } else {
                     format!(" (screen_name=@{})", screen_name)
                 };
-                eprintln!("Error: {}{}", egg_mode_error.to_string(), hint);
+                eprintln!("Error: {}{}", egg_mode_error, hint);
                 Ok(())
             }
             _ => Err(e),

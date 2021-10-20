@@ -83,7 +83,7 @@ impl Connection {
             tweets.len()
         );
 
-        let inserted = self.insert_tweets(&tweets, true)?;
+        let inserted = self.insert_tweets(tweets, true)?;
         log::trace!("inserted unseen timeline tweets; n={}", inserted);
 
         self.conn.execute("COMMIT;", params![])?;

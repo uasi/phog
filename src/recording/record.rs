@@ -35,10 +35,9 @@ pub fn with_string(db: &Connection, text: String) -> Result<()> {
         acc
     };
 
-    let fetched_status_ids: Vec<u64> = tweets.iter().map(|t| t.id).collect();
     for status_id in unseen_status_ids {
         let url = url_map.get(&status_id).expect("status_id is in url_map");
-        if fetched_status_ids.contains(&status_id) {
+        if tweets.iter().any(|t| t.id == status_id) {
             println!("Fetched {}", url);
         } else {
             eprintln!("Warning: Could not fetch {}", url);

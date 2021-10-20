@@ -51,7 +51,7 @@ impl Downloader {
             let mut added = false;
             for _ in 0..MAX_CONCURRENCY.saturating_sub(handles.len()) {
                 if let Some(single_set) = single_sets_iter.next() {
-                    let path = build_photo_path(&single_set, &single_set.photo_urls[0], 1);
+                    let path = build_photo_path(single_set, &single_set.photo_urls[0], 1);
                     let mut easy2 = Easy2::new(FileWriter::new(path));
                     easy2.get(true)?;
                     easy2.url(&single_set.photo_urls[0])?;
@@ -77,7 +77,7 @@ impl Downloader {
                 let mut i = 0;
                 while i < handles.len() {
                     let (handle, photoset) = &mut handles[i];
-                    if let Some(result) = message.result_for2(&handle) {
+                    if let Some(result) = message.result_for2(handle) {
                         if result.is_ok() {
                             if let Err(e) = handle.get_mut().finish() {
                                 log::debug!("failed to write output file; error={:?}", e);
@@ -115,10 +115,10 @@ impl Downloader {
             let mut handles = vec![];
 
             for (index, photo_url) in (1..).zip(multi_set.photo_urls.iter()) {
-                let path = build_photo_path(multi_set, &photo_url, index);
+                let path = build_photo_path(multi_set, photo_url, index);
                 let mut easy2 = Easy2::new(FileWriter::new(path));
                 easy2.get(true)?;
-                easy2.url(&photo_url)?;
+                easy2.url(photo_url)?;
                 let handle = multi.add2(easy2)?;
                 log::trace!("added download job; url={}", &photo_url);
                 handles.push(handle);
@@ -339,7 +339,7 @@ mod tests {
 mod file_writer_tests {
     use std::fs;
     use std::io;
-    use std::path::PathBuf;
+    use std::path::Path;
 
     use tempfile::tempdir;
 
@@ -502,7 +502,7 @@ mod file_writer_tests {
         assert!(writer.io_result.is_ok());
     }
 
-    fn is_not_found(path: &PathBuf) -> bool {
+    fn is_not_found(path: &Path) -> bool {
         match fs::metadata(path) {
             Err(e) => e.kind() == io::ErrorKind::NotFound,
             _ => false,

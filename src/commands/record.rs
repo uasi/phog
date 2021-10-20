@@ -137,7 +137,7 @@ pub fn run(args: Args) -> Result<()> {
 
 fn run_extract(args: ExtractArgs, db: &Connection) -> Result<()> {
     log::trace!("starting extraction; args={:?}", args);
-    let extract = Extract::new(&db);
+    let extract = Extract::new(db);
     if args.watch {
         extract.from_clipboard_watcher()?;
     } else if args.paste {
@@ -159,7 +159,7 @@ fn run_fetch(args: FetchArgs, db: &Connection) -> Result<()> {
         None => MAX_DEPTH,
     };
 
-    let fetch = Fetch::new(&db, client);
+    let fetch = Fetch::new(db, client);
 
     if let Some(likes) = args.likes {
         fetch.from_likes(likes)?;

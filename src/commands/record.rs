@@ -1,4 +1,4 @@
-use structopt::StructOpt;
+use clap::Parser;
 
 use crate::config;
 use crate::database::Connection;
@@ -7,19 +7,19 @@ use crate::recording::{fetch::MAX_DEPTH, Extract, Fetch};
 use crate::result::*;
 use crate::twitter::Client;
 
-#[derive(Debug, Default, Eq, PartialEq, StructOpt)]
+#[derive(Debug, Default, Eq, PartialEq, Parser)]
 pub struct Args {
-    #[structopt(flatten)]
+    #[clap(flatten)]
     extract_args: ExtractArgs,
-    #[structopt(flatten)]
+    #[clap(flatten)]
     fetch_args: FetchArgs,
 }
 
-#[derive(Debug, Default, Eq, PartialEq, StructOpt)]
+#[derive(Debug, Default, Eq, PartialEq, Parser)]
 pub struct ExtractArgs {
-    #[structopt(short, long, help = "Extracts tweet URLs from the clipboard")]
+    #[clap(short, long, help = "Extracts tweet URLs from the clipboard")]
     pub paste: bool,
-    #[structopt(
+    #[clap(
         short,
         long,
         help = "Watches the clipboard and extracts tweet URLs continuously"
@@ -27,16 +27,16 @@ pub struct ExtractArgs {
     pub watch: bool,
 }
 
-#[derive(Debug, Default, Eq, PartialEq, StructOpt)]
+#[derive(Debug, Default, Eq, PartialEq, Parser)]
 pub struct FetchArgs {
-    #[structopt(
+    #[clap(
         long,
         requires = "fetch-source",
         group = "fetch-modifier",
         help = "Fetches all available tweets in the sources"
     )]
     pub all: bool,
-    #[structopt(
+    #[clap(
         long,
         validator(validate_depth),
         requires = "fetch-source",
@@ -44,14 +44,14 @@ pub struct FetchArgs {
         help = "Limits the number of paginated requests to the same source"
     )]
     pub depth: Option<usize>,
-    #[structopt(
-        short = "f",
+    #[clap(
+        short = 'f',
         long = "fetch",
         group = "fetch-source",
         help = "Fetches even if only extract options are specified"
     )]
     pub force: bool,
-    #[structopt(
+    #[clap(
         short,
         long,
         require_delimiter(true),
@@ -68,7 +68,7 @@ pub struct FetchArgs {
             the record.default-likes variable in the config file is used as screen names."
     )]
     pub likes: Option<Vec<String>>,
-    #[structopt(
+    #[clap(
         short,
         long,
         require_delimiter(true),
@@ -171,7 +171,7 @@ fn run_fetch(args: FetchArgs, db: &Connection) -> Result<()> {
     Ok(())
 }
 
-fn validate_depth(depth: String) -> std::result::Result<(), String> {
+fn validate_depth(depth: &str) -> std::result::Result<(), String> {
     match depth.parse::<usize>() {
         Ok(n) if n <= MAX_DEPTH => Ok(()),
         Ok(_) => Err(format!("depth should be <= {}", MAX_DEPTH)),

@@ -1,27 +1,22 @@
 use std::env;
 
-use structopt::StructOpt;
+use clap::{IntoApp, Parser};
 
 use crate::commands;
 use crate::config;
 use crate::result::*;
 
-pub static APP_NAME: &str = structopt::clap::crate_name!();
+pub static APP_NAME: &str = clap::crate_name!();
 
 pub fn run() -> Result<()> {
     let cli = Cli::new()?;
     cli.run()
 }
 
-#[derive(Debug, StructOpt)]
-#[structopt(
-    name = APP_NAME,
-    global_setting = structopt::clap::AppSettings::ColoredHelp,
-    global_setting = structopt::clap::AppSettings::ColorAuto,
-    global_setting = structopt::clap::AppSettings::VersionlessSubcommands
-)]
+#[derive(Debug, Parser)]
+#[clap(name = APP_NAME)]
 pub struct Cli {
-    #[structopt(subcommand)]
+    #[clap(subcommand)]
     command: Option<Command>,
 }
 
@@ -32,13 +27,13 @@ impl Cli {
             if let Some(default_args) = config::settings()?.core.default_args {
                 log::trace!("using default args; args={:?}", default_args);
                 args.extend(default_args);
-                return Ok(Self::from_iter(args));
+                return Ok(Self::parse_from(args));
             }
             args.push("--help".to_owned());
-            Cli::clap().get_matches_from(args);
+            Cli::into_app().get_matches_from(args);
             unreachable!("get_matches_from will exit");
         }
-        Ok(Self::from_args())
+        Ok(Self::parse())
     }
 
     pub fn run(self) -> Result<()> {
@@ -50,21 +45,21 @@ impl Cli {
     }
 }
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 enum Command {
-    #[structopt(about = "Downloads photos attached to the recorded tweets")]
+    #[clap(about = "Downloads photos attached to the recorded tweets")]
     Download(commands::download::Args),
-    #[structopt(about = "Forgets recorded tweets and other data")]
+    #[clap(about = "Forgets recorded tweets and other data")]
     Forget(commands::forget::Args),
-    #[structopt(about = "Runs record and download at once")]
+    #[clap(about = "Runs record and download at once")]
     Get(commands::get::Args),
-    #[structopt(about = "Prints the database info")]
+    #[clap(about = "Prints the database info")]
     Info,
-    #[structopt(about = "Logs in to Twitter")]
+    #[clap(about = "Logs in to Twitter")]
     Login(commands::login::Args),
-    #[structopt(about = "Logs out from Twitter")]
+    #[clap(about = "Logs out from Twitter")]
     Logout,
-    #[structopt(about = "Records tweets from various sources")]
+    #[clap(about = "Records tweets from various sources")]
     Record(commands::record::Args),
 }
 

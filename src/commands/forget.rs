@@ -1,14 +1,14 @@
-use structopt::StructOpt;
+use clap::Parser;
 
 use crate::common::count;
 use crate::config;
 use crate::database::Connection;
 use crate::result::*;
 
-#[derive(Debug, StructOpt)]
-#[structopt(setting = structopt::clap::AppSettings::ArgRequiredElseHelp)]
+#[derive(Debug, Parser)]
+#[clap(setting = clap::AppSettings::ArgRequiredElseHelp)]
 pub struct Args {
-    #[structopt(long, help = "Performs housekeeping on the database")]
+    #[clap(long, help = "Performs housekeeping on the database")]
     pub gc: bool,
 }
 

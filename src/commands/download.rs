@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use structopt::StructOpt;
+use clap::Parser;
 
 use crate::commands;
 use crate::common::count;
@@ -11,9 +11,9 @@ use crate::result::*;
 
 static AUTO_GC_THRESHOLD: u64 = 4096;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct Args {
-    #[structopt(long, help = "Sets download directory")]
+    #[clap(long, help = "Sets download directory")]
     pub dir: Option<PathBuf>,
 }
 

@@ -1,13 +1,13 @@
-use structopt::StructOpt;
+use clap::Parser;
 
 use crate::commands;
 use crate::result::*;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct Args {
-    #[structopt(flatten)]
+    #[clap(flatten)]
     pub download_args: commands::download::Args,
-    #[structopt(flatten)]
+    #[clap(flatten)]
     pub record_args: commands::record::Args,
 }
 

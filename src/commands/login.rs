@@ -1,6 +1,6 @@
 use std::io::Write;
 
-use structopt::StructOpt;
+use clap::Parser;
 
 use crate::cli::APP_NAME;
 use crate::config::{self, Credentials, CONSUMER_KEY, CONSUMER_SECRET};
@@ -8,9 +8,9 @@ use crate::result::*;
 use crate::rt::block_on;
 use crate::twitter::Client;
 
-#[derive(Debug, StructOpt)]
+#[derive(Debug, Parser)]
 pub struct Args {
-    #[structopt(long, help = "Uses Twitter API keys to log in")]
+    #[clap(long, help = "Uses Twitter API keys to log in")]
     pub with_credentials: bool,
 }
 

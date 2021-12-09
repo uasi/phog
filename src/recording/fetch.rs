@@ -188,8 +188,7 @@ fn print_non_fatal_error_or_bail(e: GenericError, screen_name: &str) -> Result<(
             E::TwitterError(_, twitter_errors) => {
                 eprintln!(
                     "Error: Twitter error: {} (screen_name=@{})",
-                    twitter_errors,
-                    screen_name
+                    twitter_errors, screen_name
                 );
                 Ok(())
             }

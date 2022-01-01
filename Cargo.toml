@@ -14,7 +14,7 @@ publish = false
 [dependencies]
 atty = "0.2.14"
 chrono = "0.4.19"
-clap = { version = "3.0.0-rc.0", features = ["cargo", "derive"] }
+clap = { version = "3.0.0", features = ["cargo", "derive"] }
 copypasta = { version = "0.7.1", default-features = false }
 color-eyre = "0.5.11"
 curl = "0.4.39"

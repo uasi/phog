@@ -1,6 +1,6 @@
 use std::env;
 
-use clap::{IntoApp, Parser};
+use clap::Parser;
 
 use crate::commands;
 use crate::config;
@@ -30,8 +30,8 @@ impl Cli {
                 return Ok(Self::parse_from(args));
             }
             args.push("--help".to_owned());
-            Cli::into_app().get_matches_from(args);
-            unreachable!("get_matches_from will exit");
+            Cli::parse_from(args);
+            unreachable!("parse_from will exit because of --help");
         }
         Ok(Self::parse())
     }

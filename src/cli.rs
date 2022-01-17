@@ -3,7 +3,6 @@ use std::env;
 use clap::Parser;
 
 use crate::commands;
-use crate::config;
 use crate::result::*;
 
 pub static APP_NAME: &str = clap::crate_name!();
@@ -23,14 +22,7 @@ pub struct Cli {
 impl Cli {
     pub fn new() -> Result<Self> {
         if env::args().count() < 2 {
-            let mut args = vec![APP_NAME.to_owned()];
-            if let Some(default_args) = config::settings()?.core.default_args {
-                log::trace!("using default args; args={:?}", default_args);
-                args.extend(default_args);
-                return Ok(Self::parse_from(args));
-            }
-            args.push("--help".to_owned());
-            Cli::parse_from(args);
+            Cli::parse_from(&[APP_NAME, "--help"]);
             unreachable!("parse_from will exit because of --help");
         }
         Ok(Self::parse())

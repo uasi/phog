@@ -33,17 +33,9 @@ pub struct Credentials {
 #[serde(rename_all = "kebab-case")]
 pub struct Settings {
     #[serde(default)]
-    pub core: CoreSettings,
-    #[serde(default)]
     pub download: DownloadSettings,
     #[serde(default, alias = "fetch")]
     pub record: RecordSettings,
-}
-
-#[derive(Clone, Default, Deserialize)]
-#[serde(rename_all = "kebab-case")]
-pub struct CoreSettings {
-    pub default_args: Option<Vec<String>>,
 }
 
 #[derive(Clone, Default, Deserialize)]

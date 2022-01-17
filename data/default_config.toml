@@ -1,7 +1,3 @@
-# phog uses this array of values as command line arguments when you just run
-# `phog` without arguments. If unset, `phog` does nothing.
-#core.default-args = ["get", "-f", "-p"]
-
 # phog downloads photos to this directory. If unset, the current working
 # directory is used.
 #download.dir = "~/Downloads"

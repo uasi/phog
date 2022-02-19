@@ -6,7 +6,7 @@ use crate::database::Connection;
 use crate::result::*;
 
 #[derive(Debug, Parser)]
-#[clap(setting = clap::AppSettings::ArgRequiredElseHelp)]
+#[clap(arg_required_else_help = true)]
 pub struct Args {
     #[clap(long, help = "Performs housekeeping on the database")]
     pub gc: bool,

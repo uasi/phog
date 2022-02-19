@@ -38,7 +38,7 @@ pub struct FetchArgs {
     pub all: bool,
     #[clap(
         long,
-        validator(validate_depth),
+        validator = validate_depth,
         requires = "fetch-source",
         group = "fetch-modifier",
         help = "Limits the number of paginated requests to the same source"
@@ -54,10 +54,10 @@ pub struct FetchArgs {
     #[clap(
         short,
         long,
-        require_delimiter(true),
+        require_value_delimiter = true,
         group = "fetch-source",
         value_name = "screen-name",
-        next_line_help(true),
+        next_line_help = true,
         help = "Fetches likes from the users\n\
             \n\
             <screen-name> is a screen name (@ is optional) or the URL to the status page of a user.\n\
@@ -71,10 +71,10 @@ pub struct FetchArgs {
     #[clap(
         short,
         long,
-        require_delimiter(true),
+        require_value_delimiter = true,
         group = "fetch-source",
         value_name = "screen-name",
-        next_line_help(true),
+        next_line_help = true,
         help = "Fetches tweets from the users\n\
             \n\
             <screen-name> is a screen name (@ is optional) or the URL to the status page of a user.\n\

@@ -14,20 +14,20 @@ publish = false
 [dependencies]
 atty = "0.2.14"
 chrono = "0.4.19"
-clap = { version = "3.1.0", features = ["cargo", "derive"] }
+clap = { version = "3.1.8", features = ["cargo", "derive"] }
 copypasta = { version = "0.7.1", default-features = false }
-color-eyre = "0.6.0"
-curl = "0.4.42"
+color-eyre = "0.6.1"
+curl = "0.4.43"
 dirs = "4.0.0"
 egg-mode = "0.16.0"
-hyper = "0.14.17"
+hyper = "0.14.18"
 indicatif = "0.16.2"
-libc = "0.2.119"
+libc = "0.2.122"
 linkify = "0.8.0"
-log = "0.4.14"
-once_cell = "1.9.0"
+log = "0.4.16"
+once_cell = "1.10.0"
 pretty_env_logger = "0.4.0"
-regex = "1.5.4"
+regex = "1.5.5"
 serde = { version = "1.0.136", features = ["derive"] }
 serde_json = "1.0.79"
 signal-hook = "0.3.13"
@@ -36,10 +36,10 @@ tokio = { version = "1.17.0", features = ["rt-multi-thread"] }
 url = "2.2.2"
 
 [target.'cfg(windows)'.dependencies]
-rusqlite = { version = "0.26.3", features = ["serde_json", "bundled"] }
+rusqlite = { version = "0.27.0", features = ["serde_json", "bundled"] }
 
 [target.'cfg(not(windows))'.dependencies]
-rusqlite = { version = "0.26.3", features = ["serde_json"] }
+rusqlite = { version = "0.27.0", features = ["serde_json"] }
 
 [dev-dependencies]
 tempfile = "3.3.0"

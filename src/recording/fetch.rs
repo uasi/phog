@@ -93,6 +93,7 @@ impl<'a> Fetch<'a> {
             };
 
             // Label on block is experimental. Use one-time loop instead.
+            #[allow(clippy::single_element_loop)]
             'fetch_more: for _once in &[1usize] {
                 if let Some(since_id) = since_id {
                     if tweets.iter().all(|tweet| tweet.id <= since_id) {

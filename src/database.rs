@@ -347,7 +347,7 @@ impl Connection {
         )?;
 
         let rows = stmt.query_map(params![], |row| row.get(0))?.flatten();
-        Ok(rows.map(|s: String| u64::from_str(&s)).flatten().collect())
+        Ok(rows.flat_map(|s: String| u64::from_str(&s)).collect())
     }
 
     pub fn set_photos_downloaded_at(&self, rowid: i64) -> Result<usize> {

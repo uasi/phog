@@ -189,12 +189,9 @@ impl FileWriter {
     }
 
     pub fn write_to_file(&mut self, data: &[u8]) -> Option<usize> {
-        // [clippy::question_mark suggests code that's more confusing than before](https://github.com/rust-lang/rust-clippy/issues/7967)
-        #[allow(clippy::question_mark)]
         if self.io_result.is_err() {
             return None;
         }
-
         match self.file().and_then(|f| f.write(data)) {
             Ok(n) => Some(n),
             Err(e) => {

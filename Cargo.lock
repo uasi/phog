@@ -1033,7 +1033,7 @@ checksum = "478c572c3d73181ff3c2539045f6eb99e5491218eae919370993b890cdbdd98e"
 
 [[package]]
 name = "phog"
-version = "0.1.4-alpha.0"
+version = "0.1.4"
 dependencies = [
  "atty",
  "chrono",
